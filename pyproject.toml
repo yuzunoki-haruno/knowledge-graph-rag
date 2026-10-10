@@ -1,0 +1,121 @@
+[project]
+name = "knowledge-graph-rag"
+version = "0.0.0"
+description = "A RAG system based on a knowledge graph."
+readme = "README.md"
+
+authors = [
+  {name = "Haruno YUZUNOKI", email = "haruno.yusuznoki@example.com"},
+]
+
+license = "(MIT OR Beerware)"
+license-files = ["LICENSE", "LICENSES/*.txt"]
+
+requires-python = ">=3.12"
+dependencies = [
+  "torch==2.5.1",
+  "torchvision==0.20.1",
+  "torchaudio==2.5.1",
+  "huggingface-hub>=1.28.0",
+  "transformers>=5.15.0",
+  "accelerate>=1.14.0",
+  "sentence-transformers>=6.0.0",
+  "pandas>=3.0.6",
+  "python-dotenv>=1.2.4",
+]
+
+keywords = ["research", "experiment"]
+
+classifiers = [
+  "Programming Language :: Python :: 3.12",
+  "Typing :: Typed",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.3",
+    "pytest-cov>=7.1.0",
+    "ruff>=0.15.14",
+    "ty>=0.0.39",
+]
+
+#[project.urls]
+#Homepage = "https://github.com/..."
+#Repository = "https://github.com/..."
+#Issues = "https://github.com/.../issues"
+
+[build-system]
+requires = ["uv_build>=0.11.16,<0.12.0"]
+build-backend = "uv_build"
+
+[[tool.uv.index]]
+name = "pytorch-cu118"
+url = "https://download.pytorch.org/whl/cu118"
+explicit = true
+
+[tool.uv.sources]
+torch = [{ index = "pytorch-cu118"}]
+torchvision = [{ index = "pytorch-cu118"}]
+torchaudio = [{ index = "pytorch-cu118"}]
+
+[tool.ruff]
+line-length = 99
+target-version = "py312"
+exclude = [
+  ".git",
+  ".venv",
+  "build",
+  "dist",
+  "__pycache__",
+]
+
+[tool.ruff.lint]
+select = [
+  "E",   # Basics
+  "F",
+  "I",   # Imports
+  "UP",  # Modernization
+  "B",   # Bug detection
+  "SIM", # Refactoring
+  "C4",
+  "RET",
+  "PIE",
+  "ANN", # Type checking
+  "RUF", # Ruff-specific rules
+]
+
+ignore = [
+  "E501", # line too long (handled by line-length)
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "lf"
+docstring-code-format = true
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+
+[tool.ty.src]
+include = ["src"]
+
+[tool.ty.rules]
+invalid-argument-type = "error"
+invalid-assignment = "error"
+invalid-return-type = "error"
+possibly-unresolved-reference = "error"
+unresolved-import = "error"
+redundant-cast = "warn"
+unsupported-operator = "warn"
+unused-ignore-comment = "warn"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = [
+  "-ra",
+  "--strict-config",
+  "--strict-markers",
+  "--cov=src",
+  "--cov-report=term-missing",
+]
