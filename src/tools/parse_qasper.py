@@ -98,12 +98,9 @@ def extract_paragraph(record: dict[str, Any], output_dir: Path) -> None:
     paragraphs.append(get_abstract(record))
     # save file
     output_dir.mkdir(parents=True, exist_ok=True)
-    filename = output_dir / f"corpus.{doc_id}.jsonl"
+    filename = output_dir / f"paragraph.{doc_id}.jsonl"
     with open(filename, mode="w", encoding="utf-8") as f:
-        f.writelines([
-            json.dumps(paragraph._asdict(), ensure_ascii=False) + NEW_LINE
-            for paragraph in paragraphs
-        ])
+        f.writelines([paragraph.to_json() + NEW_LINE for paragraph in paragraphs])
 
 
 def extract_title(record: dict[str, Any], output_dir: Path) -> None:
@@ -118,8 +115,7 @@ def extract_title(record: dict[str, Any], output_dir: Path) -> None:
     # save file
     output_dir.mkdir(parents=True, exist_ok=True)
     filename = output_dir / f"title.{doc_id}.jsonl"
-    with open(filename, mode="w", encoding="utf-8") as f:
-        f.write(json.dumps(title._asdict(), ensure_ascii=False))
+    title.to_json(filename)
 
 
 def extract_query(record: dict[str, Any], output_dir: Path) -> None:
@@ -138,7 +134,7 @@ def extract_query(record: dict[str, Any], output_dir: Path) -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
     filename = output_dir / f"question.{doc_id}.jsonl"
     with open(filename, mode="w", encoding="utf-8") as f:
-        f.writelines([json.dumps(row._asdict(), ensure_ascii=False) + NEW_LINE for row in queries])
+        f.writelines([query.to_json() + NEW_LINE for query in queries])
 
 
 def parse_qasper_dataset(input_root_dir: PathStr, output_root_dir: PathStr) -> None:

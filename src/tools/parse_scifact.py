@@ -61,12 +61,12 @@ def extract_paragraph(record: dict[str, Any], output_dir: Path) -> None:
         output_dir (Path): 出力先ディレクトリ(存在しない場合は作成)
     """
     doc_id = record["_id"]
-    records = [get_document(record)]
+    paragraphs = [get_document(record)]
     # save file
     output_dir.mkdir(parents=True, exist_ok=True)
-    filename = output_dir / f"corpus.{doc_id}.jsonl"
+    filename = output_dir / f"paragraph.{doc_id}.jsonl"
     with open(filename, mode="w", encoding="utf-8") as f:
-        f.writelines([json.dumps(record._asdict()) + NEW_LINE for record in records])
+        f.writelines([paragraph.to_json() + NEW_LINE for paragraph in paragraphs])
 
 
 def extract_title(record: dict[str, Any], output_dir: Path) -> None:
@@ -81,8 +81,7 @@ def extract_title(record: dict[str, Any], output_dir: Path) -> None:
     # save file
     output_dir.mkdir(parents=True, exist_ok=True)
     filename = output_dir / f"title.{doc_id}.jsonl"
-    with open(filename, mode="w", encoding="utf-8") as f:
-        f.write(json.dumps(title._asdict(), ensure_ascii=False))
+    title.to_json(filename)
 
 
 def extract_query(record: dict[str, Any], df: pd.DataFrame, output_dir: Path) -> None:
@@ -102,7 +101,7 @@ def extract_query(record: dict[str, Any], df: pd.DataFrame, output_dir: Path) ->
     output_dir.mkdir(parents=True, exist_ok=True)
     filename = output_dir / f"question.{question_id}.jsonl"
     with open(filename, mode="w", encoding="utf-8") as f:
-        f.writelines([json.dumps(query._asdict(), ensure_ascii=False)])
+        f.writelines([query.to_json()])
 
 
 def parse_scifact_dataset(input_root_dir: PathStr, output_root_dir: PathStr) -> None:
